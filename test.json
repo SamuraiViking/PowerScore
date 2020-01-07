@@ -1,0 +1,93 @@
+
+
+{
+  "sudo-code": [
+    {
+      "FINAL HASH": [
+        {
+          "Id": 54321,
+          "team_a": {
+            "opponents": {
+              "Id": 12345
+            }
+          },
+          "W/L%": 45,
+          "O-W/L%": 45,
+          "OO-W/L%": 45
+        }
+      ]
+    },
+    {
+      "FIRST LOOP": [
+        {
+          "team_a": {
+            "Id": 54321
+          }
+        }
+      ]
+    },
+    {
+      "SECOND LOOP": [
+        {
+          "team_a": {
+            "Id": 54321,
+            "Wins": "",
+            "Losses": "",
+            "opponents": {
+              "Id": 12345
+            }
+          }
+        }
+      ]
+    },
+    {
+      "THIRD LOOP": [
+        {
+          "team_a": {
+            "Id": 54321,
+            "Wins": "",
+            "Losses": "",
+            "W/L%": 0,
+            "opponents": {
+              "Id": 12345
+            }
+          }
+        }
+      ]
+    },
+    {
+      "FOURTH LOOP": [
+        {
+          "team_a": {
+            "Id": 54321,
+            "Wins": "",
+            "Losses": "",
+            "W/L%": 0,
+            "O-W/L%": 0,
+            "opponents": {
+              "Id": 12345
+            }
+          }
+        }
+      ]
+    },
+    {
+      "FIFTH LOOP": [
+        {
+          "team_a": {
+            "Id": 54321,
+            "Wins": "",
+            "Losses": "",
+            "W/L%": 0,
+            "O-W/L%": 0,
+            "OO-W/L%": 0,
+            "opponents": {
+              "Id": 12345
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+
