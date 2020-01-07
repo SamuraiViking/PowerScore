@@ -97,6 +97,7 @@ function get_winner($game) {
 
   $home_team_score = $game["HomeTeam"]["Score"];
   $away_team_score = $game["AwayTeam"]["Score"];
+  
   $winner = $home_team_score > $away_team_score ?
   "HomeTeam" : "AwayTeam";
 
@@ -157,6 +158,7 @@ function insert_win_loss_per($teams) {
     $wins = $team["Wins"];
     $losses = $team["Losses"];
 
+    // value overwritten by conditions below if $wins or $losses == 0
     $win_loss_per = ($wins / ( $wins + $losses ) * 100);
 
     if($wins == 0) { 
@@ -172,22 +174,52 @@ function insert_win_loss_per($teams) {
   return $teams;
 }
 
-function insert_opponent_win_loss_per($teams) {
+function insert_opponents_win_loss_per($teams) {
   foreach ($teams as $idx => $team) {
     $opponents = $team["Opponents"];
     $opponents_win_loss_per = 0;
     $num_of_opponents = 0;
+    // opponents is an array of ids
     foreach ($opponents as $opponent) {
-      foreach($teams as $idx2 => $team2) {
-        if($team2["Id"] == $opponent) {
-          $opponents_win_loss_per += $team2["Win_loss_per"];
-          $num_of_opponents += 1;
+      foreach($teams as $team) {
+        if($team["Id"] == $opponent) {
+          $opponents_win_loss_per += $team["Win_loss_per"];
+        }
+        $num_of_opponents += 1;
+      }
+    }
+    $opponents_win_loss_per /= $num_of_opponents;
+    $teams[$idx]["Opponents_win_loss_per"] = $opponents_win_loss_per;
+  }
+  return $teams;
+}
+
+
+
+function insert_opponents_opponents_win_loss_per($teams) {
+  foreach($teams as $idx => $team) {
+    $opponents = $team["Opponents"];
+    $opponents_opponents_win_loss_per = 0;
+    $num_of_opponents_opponents = 0;
+    // opponents is an array of ids
+    foreach($opponents as $opponent) {
+      foreach($teams as $team) {
+        if($team["Id"] == $opponent) {
+          $opponent_opponents = $team["Opponents"];
+          // opponent_opponents is an array of ids
+          foreach($opponent_opponents as $opponent_opponent) {
+            foreach($teams as $team) {
+              if($team["Id"] == $opponent_opponent) {
+                $opponents_opponents_win_loss_per += $team["Win_loss_per"];
+                $num_of_opponents_opponents +=1;
+              }
+            }
+          }
         }
       }
     }
-
-    $opponents_win_loss_per /= $num_of_opponents;
-    $teams[$idx]["Opponents_win_loss_per"] = $opponents_win_loss_per;
+    $opponents_opponents_win_loss_per /= $num_of_opponents_opponents;
+    $teams[$idx]["Opponents_opponents_win_loss_per"] = $opponents_opponents_win_loss_per;
   }
   return $teams;
 }
@@ -198,7 +230,8 @@ $teams = insert_team_ids($games, $teams);
 $teams = insert_wins_and_losses($games, $teams);
 $teams = insert_opponents($games, $teams);
 $teams = insert_win_loss_per($teams);
-$teams = insert_opponent_win_loss_per($teams);
+$teams = insert_opponents_win_loss_per($teams);
+$teams = insert_opponents_opponents_win_loss_per($teams);
 
 print_r($teams);
 
