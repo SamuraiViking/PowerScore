@@ -40,7 +40,6 @@
 
 //
 
-
 function get_games() {
   $file_contents_str = file_get_contents("game_results.json");
   $file_contents_json = json_decode($file_contents_str, true);
@@ -59,10 +58,7 @@ function elem_in_array_has_key_with_value($array, $key, $value) {
 
 function insert_team_ids($games, $teams) {
   foreach($games as $game) {
-    foreach([
-      "HomeTeam", 
-      "AwayTeam"
-    ] as $home_away_status) {
+    foreach(["HomeTeam", "AwayTeam"] as $home_away_status) {
 
       $team_id   = $game[$home_away_status]["TeamId"];
       $team_name = $game[$home_away_status]["Name"];
@@ -79,6 +75,7 @@ function insert_team_ids($games, $teams) {
         'Name'   => $team_name,
         'Wins'   => 0,
         'Losses' => 0,
+        'Opponents' => array()
       );
       array_push($teams, $team);
     }
@@ -88,6 +85,14 @@ function insert_team_ids($games, $teams) {
 
 function get_winner($game) {
 
+  if(!key_exists("WonBy", $game["HomeTeam"])) {
+    return "HomeTeam";
+  }  
+
+  if(!key_exists("WonBy", $game["AwayTeam"])) {
+    return "AwayTeam";
+  }
+
   if(!key_exists("Score", $game["HomeTeam"])) {
     return;
   }
@@ -96,6 +101,7 @@ function get_winner($game) {
   $away_team_score = $game["AwayTeam"]["Score"];
   $winner = $home_team_score > $away_team_score ?
   "HomeTeam" : "AwayTeam";
+
   return $winner;  
 }
 
@@ -124,9 +130,32 @@ function insert_wins_and_losses($games, $teams) {
   return $teams;
 }
 
+function insert_opponents($games, $input_teams) {
+  foreach ($games as $game) {
+    foreach($input_teams as $idx => $input_team) {
+      $input_team_id = $input_team["Id"];
+      $home_team_id  = $game["HomeTeam"]["TeamId"];
+      $away_team_id  = $game["AwayTeam"]["TeamId"];
 
+      if($input_team_id == $home_team_id) {
+        array_push($input_teams[$idx]["Opponents"], $away_team_id);
+      }
 
+      if($input_team_id == $away_team_id) {
+        array_push($input_teams[$idx]["Opponents"], $home_team_id);
+      }
+    }
+  }
+  return $input_teams;
+}
 
+// Loop through games
+//  Loop through teams
+//    if home_team == input_team_id
+//       input_team_id => opponents => away_team_id
+//    if away_team == input_team_id
+//       input_team_id => opponents => home_team_id
+// 
 
 $games = get_games();
 $teams = array();
