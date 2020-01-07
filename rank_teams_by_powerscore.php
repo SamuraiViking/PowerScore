@@ -75,6 +75,7 @@ function insert_team_ids($games, $teams) {
         'Name'   => $team_name,
         'Wins'   => 0,
         'Losses' => 0,
+        'Win_loss_per' => 0,
         'Opponents' => array()
       );
       array_push($teams, $team);
@@ -87,14 +88,10 @@ function get_winner($game) {
 
   if(!key_exists("WonBy", $game["HomeTeam"])) {
     return "HomeTeam";
-  }  
+  }
 
   if(!key_exists("WonBy", $game["AwayTeam"])) {
     return "AwayTeam";
-  }
-
-  if(!key_exists("Score", $game["HomeTeam"])) {
-    return;
   }
 
   $home_team_score = $game["HomeTeam"]["Score"];
@@ -105,29 +102,33 @@ function get_winner($game) {
   return $winner;  
 }
 
-function insert_wins_and_losses($games, $teams) {
+function insert_wins_and_losses($games, $input_teams) {
   foreach($games as $game) {
 
     $winner = get_winner($game);
 
-    foreach(["HomeTeam", "AwayTeam"] as $home_away_status) {
+    $home_team_id = $game["HomeTeam"]["TeamId"];
+    $away_team_id = $game["AwayTeam"]["TeamId"];
 
-      $team_id = $game[$home_away_status]["TeamId"];
+    foreach ($input_teams as $idx => $input_team) {
+      $input_team_id = $input_team["Id"];
 
-      foreach($teams as $idx => $team) {
-
-        if($team_id != $team['Id']) { 
-          continue; 
-        }
-
-        $winner == $home_away_status ?
-        $teams[$idx]["Wins"] += 1
+      if($input_team_id == $home_team_id) {
+        $winner == "HomeTeam" ?
+        $input_teams[$idx]["Wins"] += 1
         :
-        $teams[$idx]["Losses"] += 1;
+        $input_teams[$idx]["Losses"] += 1;
+      }
+
+      if($input_team_id == $away_team_id) {
+        $winner == "AwayTeam" ?
+        $input_teams[$idx]["Wins"] += 1
+        :
+        $input_teams[$idx]["Losses"] += 1;
       }
     }
   }
-  return $teams;
+  return $input_teams;
 }
 
 function insert_opponents($games, $input_teams) {
@@ -149,19 +150,33 @@ function insert_opponents($games, $input_teams) {
   return $input_teams;
 }
 
-// Loop through games
-//  Loop through teams
-//    if home_team == input_team_id
-//       input_team_id => opponents => away_team_id
-//    if away_team == input_team_id
-//       input_team_id => opponents => home_team_id
-// 
+function insert_win_loss_per($teams) {
+  foreach ($teams as $idx => $team) {
+
+    $wins = $team["Wins"];
+    $losses = $team["Losses"];
+
+    $win_loss_per = ($wins / ( $wins + $losses ) * 100);
+
+    if($wins == 0) {
+      $win_loss_per = 0;
+    }
+
+    if($losses == 0) {
+      $win_loss_per = 100;
+    }
+
+    $teams[$idx]["Win_loss_per"] = $win_loss_per;
+  }
+  return $teams;
+}
 
 $games = get_games();
 $teams = array();
 $teams = insert_team_ids($games, $teams);
 $teams = insert_wins_and_losses($games, $teams);
 $teams = insert_opponents($games, $teams);
+$teams = insert_win_loss_per($teams);
 
 print_r($teams);
 
