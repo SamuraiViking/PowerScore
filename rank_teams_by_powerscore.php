@@ -76,7 +76,8 @@ function insert_team_ids($games, $teams) {
         'Wins'   => 0,
         'Losses' => 0,
         'Win_loss_per' => 0,
-        'Opponents' => array()
+        'Opponents' => array(),
+        'Opponents_win_loss_per' => 0,
       );
       array_push($teams, $team);
     }
@@ -158,15 +159,35 @@ function insert_win_loss_per($teams) {
 
     $win_loss_per = ($wins / ( $wins + $losses ) * 100);
 
-    if($wins == 0) {
-      $win_loss_per = 0;
+    if($wins == 0) { 
+      $win_loss_per = 0; 
     }
 
-    if($losses == 0) {
-      $win_loss_per = 100;
+    if($losses == 0) { 
+      $win_loss_per = 100; 
     }
 
     $teams[$idx]["Win_loss_per"] = $win_loss_per;
+  }
+  return $teams;
+}
+
+function insert_opponent_win_loss_per($teams) {
+  foreach ($teams as $idx => $team) {
+    $opponents = $team["Opponents"];
+    $opponents_win_loss_per = 0;
+    $num_of_opponents = 0;
+    foreach ($opponents as $opponent) {
+      foreach($teams as $idx2 => $team2) {
+        if($team2["Id"] == $opponent) {
+          $opponents_win_loss_per += $team2["Win_loss_per"];
+          $num_of_opponents += 1;
+        }
+      }
+    }
+
+    $opponents_win_loss_per /= $num_of_opponents;
+    $teams[$idx]["Opponents_win_loss_per"] = $opponents_win_loss_per;
   }
   return $teams;
 }
@@ -177,6 +198,7 @@ $teams = insert_team_ids($games, $teams);
 $teams = insert_wins_and_losses($games, $teams);
 $teams = insert_opponents($games, $teams);
 $teams = insert_win_loss_per($teams);
+$teams = insert_opponent_win_loss_per($teams);
 
 print_r($teams);
 
