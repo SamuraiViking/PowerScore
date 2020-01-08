@@ -252,16 +252,16 @@ function insert_OOW_per($teams)
     return $teams;
 }
 
-function multi_array_min_key_value($elems, $key)
+function array_column_min($elems, $key)
 {
-    $values = multi_array_key_values($elems, $key);
+    $values = array_column($elems, $key);
     $min_value = min($values);
     return $min_value;
 }
 
-function multi_array_max_key_value($elems, $key)
+function array_column_max($elems, $key)
 {
-    $values = multi_array_key_values($elems, $key);
+    $values = array_column($elems, $key);
     $max_value = max($values);
     return $max_value;
 }
@@ -276,8 +276,8 @@ function scaled_W_per($W_per, $min_W_per, $max_W_per)
 // Output: [{ Id: 1, Name: Miami Heat, ... , Scaled_W_per: 50 }]
 function insert_scaled_W_per($teams)
 {
-    $max_W_per = multi_array_max_key_value($teams, "W%");
-    $min_W_per = multi_array_min_key_value($teams, "W%");
+    $max_W_per = array_column_max($teams, "W%");
+    $min_W_per = array_column_min($teams, "W%");
     foreach ($teams as $idx => $team) {
         $W_per = $team["W%"];
         $scaled_W_per = scaled_W_per($W_per, $min_W_per, $max_W_per);
@@ -321,8 +321,8 @@ function scaled_SOS($SOS, $min_SOS, $max_SOS)
 // Scaled SOS = { ( 0.5 ) * [ ( SOS ) - MIN( SOS ) ] } / { [ MAX(SOS) - MIN(SOS) ] } + 0.5
 function insert_scaled_SOS($teams)
 {
-    $min_SOS = multi_array_min_key_value($teams, "SOS");
-    $max_SOS = multi_array_max_key_value($teams, "SOS");
+    $min_SOS = array_column_min($teams, "SOS");
+    $max_SOS = array_column_max($teams, "SOS");
     foreach ($teams as $idx => $team) {
         $SOS = $team["SOS"];
         $scaled_SOS = scaled_SOS($SOS, $min_SOS, $max_SOS);

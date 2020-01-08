@@ -1,11 +1,9 @@
 <?php
 
-$teams = array();
+// $a['a'] = true;
 
-$teams["Name"] = "The Rabit";
+$a = array();
 
-if(array_key_exists("Name", $teams)) {
-  echo "Yup";
+if ($a['a']) {
+    echo "Amazing";
 }
-
-?>
