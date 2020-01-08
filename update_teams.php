@@ -12,9 +12,9 @@ require_once 'pretty_json.php';
  *
  */
 
-////////////////////////////
-// 1. Win/Loss Percentage //
-////////////////////////////
+//////////////////////////////////
+// 1. W% Percentage Power Score //
+//////////////////////////////////
 
 // W  = Wins
 // L  = Losses
@@ -26,11 +26,13 @@ require_once 'pretty_json.php';
 
 // W% Weight = 80
 
-// Points from W% = W% Weight x (Scaled W%)
+// W% Power Score = W% Weight x (Scaled W%)
 
-/////////////////////////////
-// 2. Strength of Schedule //
-/////////////////////////////
+/////////////////////////////////////////
+// 2. Strength of Schedule Power Score //
+/////////////////////////////////////////
+
+// SOS = Strength of Schedule
 
 // W% = W / ( W + L )
 
@@ -44,13 +46,13 @@ require_once 'pretty_json.php';
 
 // W% Weight = 20
 
-// Points from SOS = W% Weight x (Scaled SOS %)
+// SOS Power Score = W% Weight x (Scaled SOS %)
 
 ////////////////////
 // 3. Power Score //
 ////////////////////
 
-// Power Score = Points from SOS + Points from W/L
+// Power Score = SOS Power Score + W% Power Score
 
 // Input: None
 // Output: [{ id: 1068426, Name: Miami Heat, ... }, { id: 1068426, Name: Lakers, ... }, ... ]
