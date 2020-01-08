@@ -153,16 +153,16 @@ function insert_opponents($games, $input_teams)
             $home_team_id = $game["HomeTeam"]["TeamId"];
             $away_team_id = $game["AwayTeam"]["TeamId"];
 
-            if (!key_exists("Opponents", $input_teams[$idx])) {
-                $input_teams[$idx]["Opponents"] = array();
+            if (!key_exists("Opponent_ids", $input_teams[$idx])) {
+                $input_teams[$idx]["Opponent_ids"] = array();
             }
 
             if ($input_team_id == $home_team_id) {
-                array_push($input_teams[$idx]["Opponents"], $away_team_id);
+                array_push($input_teams[$idx]["Opponent_ids"], $away_team_id);
             }
 
             if ($input_team_id == $away_team_id) {
-                array_push($input_teams[$idx]["Opponents"], $home_team_id);
+                array_push($input_teams[$idx]["Opponent_ids"], $home_team_id);
             }
         }
     }
@@ -203,7 +203,7 @@ function find_elem($elems, $key, $value)
 function insert_OW_per($teams)
 {
     foreach ($teams as $idx => $team) {
-        $opponents_ids = $team["Opponents"];
+        $opponents_ids = $team["Opponent_ids"];
         $OW_per = 0;
         $num_of_opponents = 0;
         // opponents is an array of ids
@@ -227,9 +227,9 @@ function insert_OOW_per($teams)
     foreach ($teams as $idx => $team) {
         $opponents_OW_per = 0;
         $num_of_opponents_opponents = 0;
-        foreach ($team["Opponents"] as $opponent_id) { // loop through opponents
+        foreach ($team["Opponent_ids"] as $opponent_id) { // loop through opponents
             $opponent = find_elem($teams, "Id", $opponent_id);
-            foreach ($opponent["Opponents"] as $opponent_id) {
+            foreach ($opponent["Opponent_ids"] as $opponent_id) {
                 $opponent = find_elem($teams, "Id", $opponent_id);
                 $opponents_OW_per += $opponent["W%"];
                 $num_of_opponents_opponents += 1;

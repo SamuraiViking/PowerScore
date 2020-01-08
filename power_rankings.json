@@ -4,7 +4,7 @@
 		"Name": "California Select Black",
 		"W": 0,
 		"L": 5,
-		"Opponents": [
+		"Opponent_ids": [
 			1069055,
 			1068391,
 			1068398,
@@ -26,7 +26,7 @@
 		"Name": "LMBA Desert Knights",
 		"W": 0,
 		"L": 4,
-		"Opponents": [
+		"Opponent_ids": [
 			1068383,
 			1068460,
 			1068440,
@@ -47,7 +47,7 @@
 		"Name": "The Truth EYBL",
 		"W": 0,
 		"L": 4,
-		"Opponents": [
+		"Opponent_ids": [
 			1068399,
 			1068405,
 			1068389,
@@ -68,7 +68,7 @@
 		"Name": "Team Eleate",
 		"W": 0,
 		"L": 4,
-		"Opponents": [
+		"Opponent_ids": [
 			1068417,
 			1068447,
 			1068441,
@@ -89,7 +89,7 @@
 		"Name": "The Truth OC",
 		"W": 0,
 		"L": 4,
-		"Opponents": [
+		"Opponent_ids": [
 			1068414,
 			1068394,
 			1068423,
@@ -110,7 +110,7 @@
 		"Name": "The Truth EYBL",
 		"W": 0,
 		"L": 5,
-		"Opponents": [
+		"Opponent_ids": [
 			1068426,
 			1068407,
 			1068385,
@@ -132,7 +132,7 @@
 		"Name": "Dreams Become Reality",
 		"W": 1,
 		"L": 4,
-		"Opponents": [
+		"Opponent_ids": [
 			1068397,
 			1068381,
 			1068432,
@@ -154,7 +154,7 @@
 		"Name": "Los Angeles Elite Hollingsworth",
 		"W": 1,
 		"L": 5,
-		"Opponents": [
+		"Opponent_ids": [
 			1068444,
 			1068380,
 			1068410,
@@ -177,7 +177,7 @@
 		"Name": "PowerHouse Hoops Rise",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068465,
 			1068396,
 			1068386,
@@ -198,7 +198,7 @@
 		"Name": "Nevada Hard 2 Guard",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068405,
 			1068476,
 			1068395,
@@ -219,7 +219,7 @@
 		"Name": "Bobcats Red Gab",
 		"W": 1,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068425,
 			1068391,
 			1068422
@@ -239,7 +239,7 @@
 		"Name": "Team Prep",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068394,
 			1068471,
 			1068437,
@@ -260,7 +260,7 @@
 		"Name": "Bobcats Elite",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068448,
 			1068382,
 			1068415,
@@ -281,7 +281,7 @@
 		"Name": "Hardwork Dedication Childress",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068472,
 			1068389,
 			1068405,
@@ -302,7 +302,7 @@
 		"Name": "Los Angeles Elite Rittmon",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068386,
 			1068418,
 			1068400,
@@ -323,7 +323,7 @@
 		"Name": "West Coast Flight",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068452,
 			1068388,
 			1068426,
@@ -344,7 +344,7 @@
 		"Name": "The Legion of Hoops Red",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068435,
 			1068420,
 			1068402,
@@ -365,7 +365,7 @@
 		"Name": "Salt Lake Bounce",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068455,
 			1068421,
 			1068450,
@@ -386,7 +386,7 @@
 		"Name": "California Select Red",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068427,
 			1068439,
 			1068436,
@@ -407,7 +407,7 @@
 		"Name": "Bobcats Red Josh",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068424,
 			1068395,
 			1068476,
@@ -428,7 +428,7 @@
 		"Name": "Gamepoint Inland Empire Supreme",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068393,
 			1068419,
 			1068475,
@@ -449,7 +449,7 @@
 		"Name": "Gamepoint Inland Empire",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068442,
 			1068385,
 			1068407,
@@ -470,7 +470,7 @@
 		"Name": "Gamepoint OC Elite",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068445,
 			1068435,
 			1068463,
@@ -491,7 +491,7 @@
 		"Name": "Hardwork Dedication 15U",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068439,
 			1068442,
 			1068387,
@@ -512,7 +512,7 @@
 		"Name": "O.C. Rain Craig",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068380,
 			1068448,
 			1068469,
@@ -533,7 +533,7 @@
 		"Name": "Pressure Basketball 17U",
 		"W": 2,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068410,
 			1068422,
 			1068438,
@@ -555,7 +555,7 @@
 		"Name": "HD Basketball 14U White",
 		"W": 1,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068421,
 			1068455,
 			1068411,
@@ -576,7 +576,7 @@
 		"Name": "West Coast Flight",
 		"W": 2,
 		"L": 4,
-		"Opponents": [
+		"Opponent_ids": [
 			1068423,
 			1068472,
 			1068404,
@@ -599,7 +599,7 @@
 		"Name": "California Select Red",
 		"W": 2,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068460,
 			1068383,
 			1068390,
@@ -621,7 +621,7 @@
 		"Name": "Nevada Hard 2 Guard",
 		"W": 2,
 		"L": 4,
-		"Opponents": [
+		"Opponent_ids": [
 			1068398,
 			1068445,
 			1068473,
@@ -644,7 +644,7 @@
 		"Name": "Coastal Elite Slayers",
 		"W": 2,
 		"L": 4,
-		"Opponents": [
+		"Opponent_ids": [
 			1068389,
 			1068423,
 			1068394,
@@ -667,7 +667,7 @@
 		"Name": "The Legion of Hoops",
 		"W": 1,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068464,
 			1068482,
 			1068449
@@ -687,7 +687,7 @@
 		"Name": "Fastbreak Sports 13U",
 		"W": 1,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068449,
 			1068454,
 			1068464
@@ -707,7 +707,7 @@
 		"Name": "PowerHouse Hoops UAA",
 		"W": 2,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068476,
 			1068393,
 			1068453,
@@ -729,7 +729,7 @@
 		"Name": "Coastal Select Slayers",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068453,
 			1068466,
 			1068392,
@@ -750,7 +750,7 @@
 		"Name": "Gamepoint OC",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068451,
 			1068461,
 			1068403,
@@ -771,7 +771,7 @@
 		"Name": "Fastbreak Sports 16U",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068395,
 			1068468,
 			1068456,
@@ -792,7 +792,7 @@
 		"Name": "Gamepoint Inland Empire",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068432,
 			1068462,
 			1068413,
@@ -813,7 +813,7 @@
 		"Name": "Fastbreak Sports 17U",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068433,
 			1068446,
 			1068390,
@@ -834,7 +834,7 @@
 		"Name": "Gamepoint OC Select",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068440,
 			1068467,
 			1068430,
@@ -855,7 +855,7 @@
 		"Name": "Bobcats Black Tisha",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068458,
 			1068384,
 			1068429,
@@ -876,7 +876,7 @@
 		"Name": "PowerHouse Hoops Rise",
 		"W": 2,
 		"L": 3,
-		"Opponents": [
+		"Opponent_ids": [
 			1068463,
 			1068440,
 			1068460,
@@ -898,7 +898,7 @@
 		"Name": "V3's Hoop Dream Academy Red",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068413,
 			1068475,
 			1068419,
@@ -919,7 +919,7 @@
 		"Name": "Team Prep",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068474,
 			1068400,
 			1068418,
@@ -940,7 +940,7 @@
 		"Name": "Team Creation",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068411,
 			1068450,
 			1068421,
@@ -961,7 +961,7 @@
 		"Name": "California  Select Black",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068396,
 			1068465,
 			1068412,
@@ -982,7 +982,7 @@
 		"Name": "U.T.U. Gorillas",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068408,
 			1068397,
 			1068428,
@@ -1003,7 +1003,7 @@
 		"Name": "San Diego Spartans 17U",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068409,
 			1068433,
 			1068458,
@@ -1024,7 +1024,7 @@
 		"Name": "LMBA Desert Knights",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068381,
 			1068408,
 			1068457,
@@ -1045,7 +1045,7 @@
 		"Name": "Gamepoint 17U",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068467,
 			1069055,
 			1068459,
@@ -1066,7 +1066,7 @@
 		"Name": "Strive Basketball",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068422,
 			1068398,
 			1068391,
@@ -1087,7 +1087,7 @@
 		"Name": "HD Basketball 15U",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068388,
 			1068427,
 			1068452,
@@ -1108,7 +1108,7 @@
 		"Name": "The Legion of Hoops Blue",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068382,
 			1068473,
 			1068445,
@@ -1129,7 +1129,7 @@
 		"Name": "Upper Level",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068419,
 			1068443,
 			1068401,
@@ -1150,7 +1150,7 @@
 		"Name": "Blue Chip Nation",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068434,
 			1068430,
 			1068467,
@@ -1171,7 +1171,7 @@
 		"Name": "Fastbreak Sports 15U",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068387,
 			1068436,
 			1068439,
@@ -1192,7 +1192,7 @@
 		"Name": "Hardwork Dedication 14U",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068447,
 			1068417,
 			1068416,
@@ -1213,7 +1213,7 @@
 		"Name": "HD Basketball 16U",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068470,
 			1068404,
 			1068472,
@@ -1234,7 +1234,7 @@
 		"Name": "Team Eleate",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068407,
 			1068426,
 			1068388,
@@ -1255,7 +1255,7 @@
 		"Name": "California Select White",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068418,
 			1068474,
 			1068451,
@@ -1276,7 +1276,7 @@
 		"Name": "V3's Hoop Dream Academy Black",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068457,
 			1068453,
 			1068393,
@@ -1297,7 +1297,7 @@
 		"Name": "Gamepoint OC",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068468,
 			1068424,
 			1068414,
@@ -1318,7 +1318,7 @@
 		"Name": "Gamepoint 16U",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068456,
 			1068399,
 			1068470,
@@ -1339,7 +1339,7 @@
 		"Name": "Los Angeles Elite Bryson",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068473,
 			1068415,
 			1068382,
@@ -1360,7 +1360,7 @@
 		"Name": "Los Angeles Elite Mitchell",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068443,
 			1068456,
 			1068468,
@@ -1381,7 +1381,7 @@
 		"Name": "KC Hoopers",
 		"W": 2,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068446,
 			1068440,
 			1068383
@@ -1401,7 +1401,7 @@
 		"Name": "HD Basketball 17U",
 		"W": 2,
 		"L": 2,
-		"Opponents": [
+		"Opponent_ids": [
 			1068406,
 			1068459,
 			1069055,
@@ -1422,7 +1422,7 @@
 		"Name": "California Select Black",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068392,
 			1068413,
 			1068462,
@@ -1443,7 +1443,7 @@
 		"Name": "Team Eleate",
 		"W": 2,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068482,
 			1068464,
 			1068454
@@ -1463,7 +1463,7 @@
 		"Name": "The Truth 14U Elite",
 		"W": 2,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068454,
 			1068449,
 			1068482
@@ -1483,7 +1483,7 @@
 		"Name": "The Legion of Hoops White",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068391,
 			1068425,
 			1068438,
@@ -1504,7 +1504,7 @@
 		"Name": "KC Hoopers",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068416,
 			1068441,
 			1068447,
@@ -1525,7 +1525,7 @@
 		"Name": "The Truth OC",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068436,
 			1068387,
 			1068442,
@@ -1546,7 +1546,7 @@
 		"Name": "The Truth EYBL",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068438,
 			1068406,
 			1068409,
@@ -1567,7 +1567,7 @@
 		"Name": "West Coast Flight Select",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068437,
 			1068432,
 			1068381,
@@ -1588,7 +1588,7 @@
 		"Name": "The Legion of Hoops",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068441,
 			1068416,
 			1068417,
@@ -1609,7 +1609,7 @@
 		"Name": "Gamepoint 15U",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068385,
 			1068452,
 			1068427,
@@ -1630,7 +1630,7 @@
 		"Name": "Team Creation",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068384,
 			1068434,
 			1068444,
@@ -1651,7 +1651,7 @@
 		"Name": "California Raptors",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068400,
 			1068403,
 			1068461,
@@ -1672,7 +1672,7 @@
 		"Name": "Salt Lake Bounce",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068403,
 			1068412,
 			1068465,
@@ -1693,7 +1693,7 @@
 		"Name": "Hardwork Dedication 17U",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068469,
 			1068429,
 			1068384,
@@ -1714,7 +1714,7 @@
 		"Name": "O.C. Rain Cuby",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068459,
 			1068409,
 			1068406,
@@ -1735,7 +1735,7 @@
 		"Name": "Tucson Select Basketball 17U",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068402,
 			1068410,
 			1068380,
@@ -1756,7 +1756,7 @@
 		"Name": "The Legion of Hoops White",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068471,
 			1068414,
 			1068424,
@@ -1777,7 +1777,7 @@
 		"Name": "V3's Hoop Dream Academy",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068429,
 			1068458,
 			1068433,
@@ -1798,7 +1798,7 @@
 		"Name": "The Legion of Hoops Red",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068401,
 			1068428,
 			1068397,
@@ -1819,7 +1819,7 @@
 		"Name": "Gamepoint Inland Empire",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068420,
 			1068463,
 			1068435,
@@ -1840,7 +1840,7 @@
 		"Name": "U.T.U. Gorillas",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068415,
 			1068444,
 			1068434,
@@ -1861,7 +1861,7 @@
 		"Name": "Salt Lake Bounce",
 		"W": 3,
 		"L": 1,
-		"Opponents": [
+		"Opponent_ids": [
 			1068428,
 			1068470,
 			1068399,
@@ -1882,7 +1882,7 @@
 		"Name": "Los Angeles Elite Payne",
 		"W": 5,
 		"L": 0,
-		"Opponents": [
+		"Opponent_ids": [
 			1068461,
 			1068451,
 			1068474,
@@ -1904,7 +1904,7 @@
 		"Name": "HD Basketball 14U Red",
 		"W": 4,
 		"L": 0,
-		"Opponents": [
+		"Opponent_ids": [
 			1068450,
 			1068411,
 			1068455,
@@ -1925,7 +1925,7 @@
 		"Name": "YouBall Undefeated",
 		"W": 4,
 		"L": 0,
-		"Opponents": [
+		"Opponent_ids": [
 			1068390,
 			1068402,
 			1068420,
@@ -1946,7 +1946,7 @@
 		"Name": "Las Vegas Panthers",
 		"W": 4,
 		"L": 0,
-		"Opponents": [
+		"Opponent_ids": [
 			1068475,
 			1068392,
 			1068466,
@@ -1967,7 +1967,7 @@
 		"Name": "Coastal Premier Slayers",
 		"W": 4,
 		"L": 0,
-		"Opponents": [
+		"Opponent_ids": [
 			1068404,
 			1068437,
 			1068471,
@@ -1988,7 +1988,7 @@
 		"Name": "Pressure Basketball 15U",
 		"W": 4,
 		"L": 0,
-		"Opponents": [
+		"Opponent_ids": [
 			1068412,
 			1068386,
 			1068396,
@@ -2009,7 +2009,7 @@
 		"Name": "Fuego",
 		"W": 4,
 		"L": 0,
-		"Opponents": [
+		"Opponent_ids": [
 			1068462,
 			1068401,
 			1068443,
@@ -2030,7 +2030,7 @@
 		"Name": "Hardwork Dedication Jackson",
 		"W": 4,
 		"L": 0,
-		"Opponents": [
+		"Opponent_ids": [
 			1068466,
 			1068457,
 			1068408,
@@ -2051,7 +2051,7 @@
 		"Name": "Salt Lake Bounce",
 		"W": 4,
 		"L": 0,
-		"Opponents": [
+		"Opponent_ids": [
 			1068430,
 			1068469,
 			1068448,
