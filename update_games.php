@@ -3,7 +3,7 @@
 require_once 'pretty_json.php'; // has pretty_json Fn which takes json input and returns a formatted/indented JSON
 include 'keys.php';
 
-function get_most_recent_game_results($input_api_key, $input_secret_key)
+function get_most_recent_game_results($input_api_key, $input_secret_key, $input_url)
 {
     $api_key = $input_api_key;
 
@@ -25,7 +25,7 @@ function get_most_recent_game_results($input_api_key, $input_secret_key)
         'Content-length: 0',
     ];
 
-    $url = 'https://basketball.exposureevents.com/api/v1/games?eventid=122706&pagesize=300';
+    $url = $input_url;
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -39,4 +39,4 @@ function get_most_recent_game_results($input_api_key, $input_secret_key)
     file_put_contents('games.json', $game_results);
 }
 
-get_most_recent_game_results($API_KEY, $SECRET_KEY);
+get_most_recent_game_results($API_KEY, $SECRET_KEY, $URL);
