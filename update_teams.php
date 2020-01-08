@@ -1,7 +1,5 @@
 <?php
 
-require_once 'pretty_json.php';
-
 /**
  * This File imports the matches from games.json
  * and then outputs the teams into teams.json
@@ -383,8 +381,7 @@ function update_teams($file)
     $teams = insert_strength_of_schedule_power_score($teams);
     $teams = insert_power_score($teams);
     $teams = multi_array_sort($teams, "Power_score");
-    $teams = json_encode($teams);
-    $teams = pretty_json($teams);
+    $teams = json_encode($teams, JSON_PRETTY_PRINT);
     file_put_contents($file, $teams);
 }
 

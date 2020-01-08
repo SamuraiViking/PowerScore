@@ -1,6 +1,5 @@
 <?php
 
-require_once 'pretty_json.php'; // has pretty_json Fn which takes json input and returns a formatted/indented JSON
 include 'keys.php';
 
 function get_most_recent_game_results($input_api_key, $input_secret_key, $input_url)
@@ -34,7 +33,8 @@ function get_most_recent_game_results($input_api_key, $input_secret_key, $input_
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
     $game_results = trim(curl_exec($ch));
-    $game_results = pretty_json($game_results);
+    $game_results = json_decode($game_results);
+    $game_results = json_encode($game_results, JSON_PRETTY_PRINT);
 
     file_put_contents('games.json', $game_results);
 }
