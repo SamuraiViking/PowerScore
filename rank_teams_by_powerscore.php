@@ -2,39 +2,54 @@
 
 require_once 'indent_json.php';
 
+/**
+ * This File imports the matches from game_results.json
+ * and then outputs the teams in order of their power score.
+ *
+ * The Calculation for the power score of each team can be
+ * Seen Down Below
+ *
+ */
+
 ////////////////////////////
 // 1. Win/Loss Percentage //
 ////////////////////////////
 
-// W/L% = W / ( W + L )
+// W  = Wins
+// L  = Losses
+// W% = Win Percentage
 
-// Scaled W/L% = { ( 0.5 ) * [ ( W/L% ) - MIN( W/L% ) ] } / { [ MAX(W/L%) - MIN(W/L%) ] } + 0.5
+// W% = W / ( W + L )
 
-// W/L Weight = 80
+// Scaled W% = { ( 0.5 ) * [ ( W% ) - MIN( W% ) ] } / { [ MAX(W%) - MIN(W%) ] } + 0.5
 
-// Points from W/L = W/L Weight x (Scaled W/L %)
+// W% Weight = 80
+
+// Points from W% = W% Weight x (Scaled W%)
 
 /////////////////////////////
 // 2. Strength of Schedule //
 /////////////////////////////
 
-// Opponents W/L% = O-W/L%
+// W% = W / ( W + L )
 
-// Opponents Opponents W/L% = OO-W/L%
+// O-W% = Sum of W% of all Opponents / Number of Opponents
 
-// W/L% = W / ( W + L )
+// OO-W% = Sum of W% of all Opponents Opponents / Number of Opponents Opponents
 
-// O-W/L% = Sum of W/L% of all O / Number of O
-
-// OO-W/L% = Sum of W/L% of all OO / Number of OO
-
-// SOS = 2/3 * (O-W/L %) + 1/3 * (OO-W/L%)
+// SOS = 2/3 * (O-W/L %) + 1/3 * (OO-W%)
 
 // Scaled SOS = { ( 0.5 ) * [ ( SOS ) - MIN( SOS ) ] } / { [ MAX(SOS) - MIN(SOS) ] } + 0.5
 
-// W/L% Weight = 20
+// W% Weight = 20
 
-// Points from SOS = W/L% Weight x (Scaled SOS %)
+// Points from SOS = W% Weight x (Scaled SOS %)
+
+////////////////////
+// 3. Power Score //
+////////////////////
+
+// Power Score = Points from SOS + Points from W/L
 
 // Input: None
 // Output: [{ id: 1068426, Name: Miami Heat, ... }, { id: 1068426, Name: Lakers, ... }, ... ]
@@ -142,8 +157,10 @@ function insert_W_and_L($games, $input_teams)
     return $input_teams;
 }
 
-// Input:  [{ Id: 1, Name: Miami Heat, ... }]
-// Output: [{ Id: 1, Name: Miami Heat, ... , Opponents: array( 1068407, 1068426, ... , 1068388 ) }]
+// Input :  [ { ... }, { ... },  ... ]
+//
+// Output:  [ { ... Opponent_ids: array( 125423, 1256345 ) },
+//            { ... Opponent_ids: array( 125423, 1256345 ) },  ... ]
 function insert_opponents($games, $input_teams)
 {
     foreach ($games as $game) {
@@ -198,15 +215,16 @@ function find_elem($elems, $key, $value)
     return false;
 }
 
-// Input:  [{ Id: 1, Name: Miami Heat, ... }]
-// Output: [{ Id: 1, Name: Miami Heat, ... , OW_per: 50 }]
+// Input :  [ { ...         }, { ...         },  ... ]
+// Output:  [ { ... OW%: 50 }, { ... OW%: 20 },  ... ]
 function insert_OW_per($teams)
 {
     foreach ($teams as $idx => $team) {
+
         $opponents_ids = $team["Opponent_ids"];
         $OW_per = 0;
         $num_of_opponents = 0;
-        // opponents is an array of ids
+
         foreach ($opponents_ids as $opponent_id) {
 
             $opponent = find_elem($teams, "Id", $opponent_id);
@@ -220,19 +238,27 @@ function insert_OW_per($teams)
     return $teams;
 }
 
-// Input:  [{ Id: 1, Name: Miami Heat, ... }]
-// Output: [{ Id: 1, Name: Miami Heat, ... , OOW_per: 50 }]
+// Input :  [ { ...          }, { ...          },  ... ]
+// Output:  [ { ... OOW%: 50 }, { ... OOW%: 20 },  ... ]
 function insert_OOW_per($teams)
 {
     foreach ($teams as $idx => $team) {
+
         $opponents_OW_per = 0;
         $num_of_opponents_opponents = 0;
-        foreach ($team["Opponent_ids"] as $opponent_id) { // loop through opponents
+        $opponents_ids = $team["Opponent_ids"];
+
+        foreach ($opponents_ids as $opponent_id) {
+
             $opponent = find_elem($teams, "Id", $opponent_id);
-            foreach ($opponent["Opponent_ids"] as $opponent_id) {
+            $opponents_ids = $opponent["Opponent_ids"];
+
+            foreach ($opponents_ids as $opponent_id) {
+
                 $opponent = find_elem($teams, "Id", $opponent_id);
                 $opponents_OW_per += $opponent["W%"];
                 $num_of_opponents_opponents += 1;
+
             }
         }
         $opponents_OW_per /= $num_of_opponents_opponents;
@@ -255,19 +281,22 @@ function array_column_max($elems, $key)
     return $max_value;
 }
 
-// Scaled W/L% = [ 0.5 * ( W/L% - MIN( W/L% ) ) ] / { [ MAX(W/L%) - MIN(W/L%) ] } + 0.5
 function scaled_W_per($W_per, $min_W_per, $max_W_per)
 {
     return (0.5 * ($W_per - $min_W_per)) / ($max_W_per - $min_W_per) + 0.5;
 }
 
-// Input:  [{ Id: 1, Name: Miami Heat, ... }]
-// Output: [{ Id: 1, Name: Miami Heat, ... , Scaled_W_per: 50 }]
+// Input:  [{ ... },
+//          { ... }, ... ]
+//
+// Output: [{ ... Scaled_W_per: 50 },
+//          { ... Scaled_W_per: 80 }, ... ]
 function insert_scaled_W_per($teams)
 {
     $max_W_per = array_column_max($teams, "W%");
     $min_W_per = array_column_min($teams, "W%");
     foreach ($teams as $idx => $team) {
+
         $W_per = $team["W%"];
         $scaled_W_per = scaled_W_per($W_per, $min_W_per, $max_W_per);
         $teams[$idx]["Scaled_W%"] = $scaled_W_per;
@@ -275,8 +304,6 @@ function insert_scaled_W_per($teams)
     return $teams;
 }
 
-// SOS = 2/3 * (O-W/L %) + 1/3 * (OO-W/L%)
-// Input:
 function SOS($OW_per, $OOW_per)
 {
     return 2 / 3 * $OW_per + 1 / 3 * $OOW_per;
@@ -285,6 +312,7 @@ function SOS($OW_per, $OOW_per)
 function insert_SOS($teams)
 {
     foreach ($teams as $idx => $team) {
+
         $OW_per = $team["OW%"];
         $OOW_per = $team["OOW%"];
         $SOS = SOS($OW_per, $OOW_per);
@@ -293,27 +321,19 @@ function insert_SOS($teams)
     return $teams;
 }
 
-function multi_array_key_values($elems, $key)
-{
-    $values = array();
-    foreach ($elems as $elem) {
-        $value = $elem[$key];
-        array_push($values, $value);
-    }
-    return $values;
-}
-
 function scaled_SOS($SOS, $min_SOS, $max_SOS)
 {
     return (0.5 * ($SOS - $min_SOS)) / (($max_SOS - $min_SOS) + 0.5);
 }
 
-// Scaled SOS = { ( 0.5 ) * [ ( SOS ) - MIN( SOS ) ] } / { [ MAX(SOS) - MIN(SOS) ] } + 0.5
+// Input:  [{ ...                   }, { ...                   }, ... ]
+// Output: [{ ... scaled_SOS: 0.435 }, { ... scaled_SOS: 0.817 }, ... ]
 function insert_scaled_SOS($teams)
 {
     $min_SOS = array_column_min($teams, "SOS");
     $max_SOS = array_column_max($teams, "SOS");
     foreach ($teams as $idx => $team) {
+
         $SOS = $team["SOS"];
         $scaled_SOS = scaled_SOS($SOS, $min_SOS, $max_SOS);
         $teams[$idx]["Scaled_SOS"] = $scaled_SOS;
@@ -321,24 +341,27 @@ function insert_scaled_SOS($teams)
     return $teams;
 }
 
+// Input:  [{ ...                    }, { ...                    }, ... ]
+// Output: [{ ... W%_power_score: 54 }, { ... W%_power_score: 78 }, ... ]
 function insert_W_per_power_score($teams)
 {
-    // Points from W/L = W/L Weight x (Scaled W/L %)
     $W_per_weight = 80;
     foreach ($teams as $idx => $team) {
+
         $scaled_W_per = $team["Scaled_W%"];
         $W_per_power_score = $W_per_weight * $scaled_W_per;
         $teams[$idx]["W%_power_score"] = $W_per_power_score;
     }
     return $teams;
 }
-// W/L% Weight = 20
 
-// Points from SOS = W/L% Weight x (Scaled SOS %)
+// Input:  [{ ...                     }, { ...                     }, ... ]
+// Output: [{ ... SOS_power_score: 63 }, { ... SOS_power_score: 72 }, ... ]
 function insert_SOS_power_score($teams)
 {
     $SOS_weight = 20;
     foreach ($teams as $idx => $team) {
+
         $scaled_SOS = $team["Scaled_SOS"];
         $SOS_power_score = $SOS_weight * $scaled_SOS;
         $teams[$idx]["SOS_power_score"] = $SOS_power_score;
@@ -346,12 +369,13 @@ function insert_SOS_power_score($teams)
     return $teams;
 }
 
+// Input:  [{ ...                 }, { ...                 }, ... ]
+// Output: [{ ... power_score: 63 }, { ... power_score: 72 }, ... ]
 function insert_power_score($teams)
 {
     foreach ($teams as $idx => $team) {
-        $W_per_power_score = $team["W%_power_score"];
-        $SOS_power_score = $team["SOS_power_score"];
-        $power_score = $W_per_power_score + $SOS_power_score;
+
+        $power_score = $team["W%_power_score"] + $team["SOS_power_score"];
         $teams[$idx]["Power_score"] = $power_score;
     }
     return $teams;
@@ -372,14 +396,12 @@ $teams = insert_W_per_power_score($teams);
 $teams = insert_SOS_power_score($teams);
 $teams = insert_power_score($teams);
 
-// Sort teams by asc order by power score
+// Sort teams by power score in asc order
 array_multisort(array_map(function ($elem) {
     return $elem["Power_score"];
 }, $teams), SORT_ASC, $teams);
 
 $teams = json_encode($teams);
 $teams = indent_json($teams);
-
-print_r($teams);
 
 file_put_contents('power_rankings.json', $teams);
