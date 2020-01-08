@@ -91,7 +91,7 @@ function insert_team_name_and_ids($games, $teams)
             array_push($teams, $team);
         }
     }
-    // return $teams;
+    return $teams;
 }
 
 // Input:  { Id: 1, ... , HomeTeam: { ... , Score: 65 }, AwayTeam: { ... , Score: 33 } }
@@ -365,21 +365,25 @@ function multi_array_sort($teams, $key)
     return $teams;
 }
 
-$games = get_games();
-$teams = array();
-$teams = insert_team_name_and_ids($games, $teams);
-$teams = insert_wins_and_losses($games, $teams);
-$teams = insert_opponents($games, $teams);
-$teams = insert_win_per($teams);
-$teams = insert_opponents_and_opponents_opponents_win_per($teams);
-$teams = insert_scaled_win_per($teams);
-$teams = insert_strength_of_schedule($teams);
-$teams = insert_scaled_strength_of_schedule($teams);
-$teams = insert_win_per_power_score($teams);
-$teams = insert_strength_of_schedule_power_score($teams);
-$teams = insert_power_score($teams);
-$teams = multi_array_sort($teams, "Power_score");
-$teams = json_encode($teams);
-$teams = indent_json($teams);
+function update_teams($file)
+{
+    $games = get_games();
+    $teams = array();
+    $teams = insert_team_name_and_ids($games, $teams);
+    $teams = insert_wins_and_losses($games, $teams);
+    $teams = insert_opponents($games, $teams);
+    $teams = insert_win_per($teams);
+    $teams = insert_opponents_and_opponents_opponents_win_per($teams);
+    $teams = insert_scaled_win_per($teams);
+    $teams = insert_strength_of_schedule($teams);
+    $teams = insert_scaled_strength_of_schedule($teams);
+    $teams = insert_win_per_power_score($teams);
+    $teams = insert_strength_of_schedule_power_score($teams);
+    $teams = insert_power_score($teams);
+    $teams = multi_array_sort($teams, "Power_score");
+    $teams = json_encode($teams);
+    $teams = indent_json($teams);
+    file_put_contents($file, $teams);
+}
 
-file_put_contents('power_rankings.json', $teams);
+update_teams("teams.json");

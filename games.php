@@ -1,10 +1,11 @@
 <?php
 
 require_once 'indent_json.php'; // has indent_json Fn which takes json input and returns a formatted/indented JSON
+include 'keys.php';
 
-function get_most_recent_game_results()
+function get_most_recent_game_results($input_api_key, $input_secret_key)
 {
-    $api_key = 'R9bUvcj9pJYuGy';
+    $api_key = $input_api_key;
 
     $datetime = new \DateTime();
     $datetime->setTimezone(new \DateTimeZone('UTC'));
@@ -12,7 +13,7 @@ function get_most_recent_game_results()
 
     $path = $api_key . '&get&' . $timestamp . '&/api/v1/games';
     $message = strtoupper($path);
-    $secret_key = 'QLn448NjP97hBd2pW7Q99963K9T9s9wB';
+    $secret_key = $input_secret_key;
     $hash = hash_hmac('sha256', $message, $secret_key, true);
     $hashString = base64_encode($hash);
 
@@ -38,4 +39,4 @@ function get_most_recent_game_results()
     file_put_contents('games.json', $game_results);
 }
 
-get_most_recent_game_results();
+get_most_recent_game_results($API_KEY, $SECRET_KEY);
