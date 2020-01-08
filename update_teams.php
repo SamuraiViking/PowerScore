@@ -183,7 +183,7 @@ function find_elem_idx($elems, $key, $value)
 //
 // Output:  [ { ... Opponent_ids: array( 125423, 1256345 ) },
 //            { ... Opponent_ids: array( 125423, 1256345 ) },  ... ]
-function insert_opponents($games, $teams)
+function insert_opponents_ids($games, $teams)
 {
     foreach ($games as $game) {
 
@@ -223,8 +223,8 @@ function insert_win_per($teams)
 }
 
 // Input :  [ { ...                   }, { ...                   },  ... ]
-// Output:  [ { ... OW%: 43, OOW%: 50 }, { ... OW%: 30, OOW%: 20 },  ... ]
-function insert_opponents_and_opponents_opponents_win_per($teams)
+// Output:  [ { ... OW%: 43, OOW%: 50 }, { ... OW%: 30, OOW%: 20 },  ... 
+function insert_opponents_win_per_and_opponents_opponents_win_per($teams)
 {
     foreach ($teams as $idx => $team) {
 
@@ -371,9 +371,9 @@ function update_teams($file)
     $teams = array();
     $teams = insert_team_name_and_ids($games, $teams);
     $teams = insert_wins_and_losses($games, $teams);
-    $teams = insert_opponents($games, $teams);
+    $teams = insert_opponents_ids($games, $teams);
     $teams = insert_win_per($teams);
-    $teams = insert_opponents_and_opponents_opponents_win_per($teams);
+    $teams = insert_opponents_win_per_and_opponents_opponents_win_per($teams);
     $teams = insert_scaled_win_per($teams);
     $teams = insert_strength_of_schedule($teams);
     $teams = insert_scaled_strength_of_schedule($teams);
