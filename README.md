@@ -1,6 +1,9 @@
 # PowerScore
 
-```touch keys.php```
+```
+git clone https://github.com/SamuraiViking/PowerScore.git
+touch keys.php
+```
 
 ```
 // keys.php
