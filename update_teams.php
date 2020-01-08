@@ -34,9 +34,9 @@ require_once 'pretty_json.php';
 
 // W% = W / ( W + L )
 
-// O-W% = Sum of W% of all Opponents / Number of Opponents
+// OW% = Sum of W% of all Opponents / Number of Opponents
 
-// OO-W% = Sum of W% of all Opponents Opponents / Number of Opponents Opponents
+// OOW% = Sum of W% of all Opponents Opponents / Number of Opponents Opponents
 
 // SOS = 2/3 * (O-W/L %) + 1/3 * (OO-W%)
 
