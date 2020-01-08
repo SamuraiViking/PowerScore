@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+require_once 'indent_json.php';
 
 ////////////////////////////
 // 1. Win/Loss Percentage //
@@ -11,7 +13,6 @@
 // W/L Weight = 80
 
 // Points from W/L = W/L Weight x (Scaled W/L %)
-
 
 /////////////////////////////
 // 2. Strength of Schedule //
@@ -35,204 +36,360 @@
 
 // Points from SOS = W/L% Weight x (Scaled SOS %)
 
-
-// Step 1: 
-
-//
-
-function get_games() {
-  $file_contents_str = file_get_contents("game_results.json");
-  $file_contents_json = json_decode($file_contents_str, true);
-  $games = $file_contents_json["Games"]["Results"];
-  return $games;
+// Input: None
+// Output: [{ id: 1068426, Name: Miami Heat, ... }, { id: 1068426, Name: Lakers, ... }, ... ]
+function get_games()
+{
+    $file_contents_str = file_get_contents("game_results.json");
+    $file_contents_json = json_decode($file_contents_str, true);
+    $games = $file_contents_json["Games"]["Results"];
+    return $games;
 }
 
-function elem_in_array_has_key_with_value($array, $key, $value) {
-  foreach($array as $elem) {
-    if($elem[$key] == $value) {
-      return true;
-    }
-  }
-  return false;
-}
+// Input:  []
+// Output: [{ id: 1068426, Name: Miami Heat, ... }, { id: 1068426, Name: Lakers, ... } ... ]
+function insert_team_ids($games, $teams)
+{
+    $inserted_ids = array();
+    foreach ($games as $game) {
+        foreach (["HomeTeam", "AwayTeam"] as $home_away_status) {
+            $team_id = $game[$home_away_status]["TeamId"];
+            $team_name = $game[$home_away_status]["Name"];
 
-function insert_team_ids($games, $teams) {
-  foreach($games as $game) {
-    foreach(["HomeTeam", "AwayTeam"] as $home_away_status) {
-
-      $team_id   = $game[$home_away_status]["TeamId"];
-      $team_name = $game[$home_away_status]["Name"];
-
-      if(elem_in_array_has_key_with_value(
-        $teams, 
-        "Id", 
-        $team_id)) {
-        continue;
-      }
-
-      $team = array(
-        'Id'     => $team_id,
-        'Name'   => $team_name,
-        'Wins'   => 0,
-        'Losses' => 0,
-        'Win_loss_per' => 0,
-        'Opponents' => array(),
-        'Opponents_win_loss_per' => 0,
-      );
-      array_push($teams, $team);
-    }
-  }
-  return $teams;
-}
-
-function get_winner($game) {
-
-  if(!key_exists("WonBy", $game["HomeTeam"])) {
-    return "HomeTeam";
-  }
-
-  if(!key_exists("WonBy", $game["AwayTeam"])) {
-    return "AwayTeam";
-  }
-
-  $home_team_score = $game["HomeTeam"]["Score"];
-  $away_team_score = $game["AwayTeam"]["Score"];
-  
-  $winner = $home_team_score > $away_team_score ?
-  "HomeTeam" : "AwayTeam";
-
-  return $winner;  
-}
-
-function insert_wins_and_losses($games, $input_teams) {
-  foreach($games as $game) {
-
-    $winner = get_winner($game);
-
-    $home_team_id = $game["HomeTeam"]["TeamId"];
-    $away_team_id = $game["AwayTeam"]["TeamId"];
-
-    foreach ($input_teams as $idx => $input_team) {
-      $input_team_id = $input_team["Id"];
-
-      if($input_team_id == $home_team_id) {
-        $winner == "HomeTeam" ?
-        $input_teams[$idx]["Wins"] += 1
-        :
-        $input_teams[$idx]["Losses"] += 1;
-      }
-
-      if($input_team_id == $away_team_id) {
-        $winner == "AwayTeam" ?
-        $input_teams[$idx]["Wins"] += 1
-        :
-        $input_teams[$idx]["Losses"] += 1;
-      }
-    }
-  }
-  return $input_teams;
-}
-
-function insert_opponents($games, $input_teams) {
-  foreach ($games as $game) {
-    foreach($input_teams as $idx => $input_team) {
-      $input_team_id = $input_team["Id"];
-      $home_team_id  = $game["HomeTeam"]["TeamId"];
-      $away_team_id  = $game["AwayTeam"]["TeamId"];
-
-      if($input_team_id == $home_team_id) {
-        array_push($input_teams[$idx]["Opponents"], $away_team_id);
-      }
-
-      if($input_team_id == $away_team_id) {
-        array_push($input_teams[$idx]["Opponents"], $home_team_id);
-      }
-    }
-  }
-  return $input_teams;
-}
-
-function insert_win_loss_per($teams) {
-  foreach ($teams as $idx => $team) {
-
-    $wins = $team["Wins"];
-    $losses = $team["Losses"];
-
-    // value overwritten by conditions below if $wins or $losses == 0
-    $win_loss_per = ($wins / ( $wins + $losses ) * 100);
-
-    if($wins == 0) { 
-      $win_loss_per = 0; 
-    }
-
-    if($losses == 0) { 
-      $win_loss_per = 100; 
-    }
-
-    $teams[$idx]["Win_loss_per"] = $win_loss_per;
-  }
-  return $teams;
-}
-
-function insert_opponents_win_loss_per($teams) {
-  foreach ($teams as $idx => $team) {
-    $opponents = $team["Opponents"];
-    $opponents_win_loss_per = 0;
-    $num_of_opponents = 0;
-    // opponents is an array of ids
-    foreach ($opponents as $opponent) {
-      foreach($teams as $team) {
-        if($team["Id"] == $opponent) {
-          $opponents_win_loss_per += $team["Win_loss_per"];
-        }
-        $num_of_opponents += 1;
-      }
-    }
-    $opponents_win_loss_per /= $num_of_opponents;
-    $teams[$idx]["Opponents_win_loss_per"] = $opponents_win_loss_per;
-  }
-  return $teams;
-}
-
-
-
-function insert_opponents_opponents_win_loss_per($teams) {
-  foreach($teams as $idx => $team) {
-    $opponents = $team["Opponents"];
-    $opponents_opponents_win_loss_per = 0;
-    $num_of_opponents_opponents = 0;
-    // opponents is an array of ids
-    foreach($opponents as $opponent) {
-      foreach($teams as $team) {
-        if($team["Id"] == $opponent) {
-          $opponent_opponents = $team["Opponents"];
-          // opponent_opponents is an array of ids
-          foreach($opponent_opponents as $opponent_opponent) {
-            foreach($teams as $team) {
-              if($team["Id"] == $opponent_opponent) {
-                $opponents_opponents_win_loss_per += $team["Win_loss_per"];
-                $num_of_opponents_opponents +=1;
-              }
+            if (in_array($team_id, $inserted_ids)) {
+                continue;
             }
-          }
+
+            array_push($inserted_ids, $team_id);
+
+            $team = array(
+                'Id' => $team_id,
+                'Name' => $team_name,
+            );
+            array_push($teams, $team);
         }
-      }
     }
-    $opponents_opponents_win_loss_per /= $num_of_opponents_opponents;
-    $teams[$idx]["Opponents_opponents_win_loss_per"] = $opponents_opponents_win_loss_per;
-  }
-  return $teams;
+    return $teams;
+}
+
+// Input:  { Id: 1, ... , HomeTeam: { ... , Score: 65 }, AwayTeam: { ... , Score: 33 } }
+// Output: "HomeTeam"
+//
+// or
+//
+// Input:  { Id: 1, ... , HomeTeam: { ... , WonBy: 7 }, AwayTeam: { ... } }
+// Output: "HomeTeam"
+function get_winner($game)
+{
+    if (!key_exists("WonBy", $game["HomeTeam"])) {
+        return "HomeTeam";
+    }
+
+    if (!key_exists("WonBy", $game["AwayTeam"])) {
+        return "AwayTeam";
+    }
+
+    $home_team_score = $game["HomeTeam"]["Score"];
+    $away_team_score = $game["AwayTeam"]["Score"];
+
+    $winner = $home_team_score > $away_team_score ?
+    "HomeTeam" : "AwayTeam";
+
+    return $winner;
+}
+
+// Input:  [{ Id: 1, Name: Miami Heat, ... }]
+// Output: [{ Id: 1, Name: Miami Heat, ... , W: 3, L: 2 }]
+function insert_W_and_L($games, $input_teams)
+{
+    foreach ($games as $game) {
+
+        $winner = get_winner($game);
+
+        $home_team_id = $game["HomeTeam"]["TeamId"];
+        $away_team_id = $game["AwayTeam"]["TeamId"];
+
+        foreach ($input_teams as $idx => $input_team) {
+
+            if (!key_exists("W", $input_team)) {
+                $input_team["W"] = 0;
+            }
+
+            if (!key_exists("L", $input_team)) {
+                $input_team["L"] = 0;
+            }
+
+            if ($input_team["Id"] == $home_team_id) {
+
+                $winner == "HomeTeam" ?
+
+                $input_team["W"] += 1
+                :
+                $input_team["L"] += 1;
+            }
+
+            if ($input_team["Id"] == $away_team_id) {
+
+                $winner == "AwayTeam" ?
+
+                $input_team["W"] += 1
+                :
+                $input_team["L"] += 1;
+            }
+            $input_teams[$idx] = $input_team;
+        }
+    }
+    return $input_teams;
+}
+
+// Input:  [{ Id: 1, Name: Miami Heat, ... }]
+// Output: [{ Id: 1, Name: Miami Heat, ... , Opponents: array( 1068407, 1068426, ... , 1068388 ) }]
+function insert_opponents($games, $input_teams)
+{
+    foreach ($games as $game) {
+        foreach ($input_teams as $idx => $input_team) {
+
+            $input_team_id = $input_team["Id"];
+            $home_team_id = $game["HomeTeam"]["TeamId"];
+            $away_team_id = $game["AwayTeam"]["TeamId"];
+
+            if (!key_exists("Opponents", $input_teams[$idx])) {
+                $input_teams[$idx]["Opponents"] = array();
+            }
+
+            if ($input_team_id == $home_team_id) {
+                array_push($input_teams[$idx]["Opponents"], $away_team_id);
+            }
+
+            if ($input_team_id == $away_team_id) {
+                array_push($input_teams[$idx]["Opponents"], $home_team_id);
+            }
+        }
+    }
+    return $input_teams;
+}
+
+function insert_W_per($teams)
+{
+    foreach ($teams as $idx => $team) {
+        $wins = $team["W"];
+        $losses = $team["L"];
+        // value overwritten by conditions below if $wins or $losses == 0
+        $W_per = ($wins / ($wins + $losses) * 100);
+
+        if ($wins == 0) {
+            $W_per = 0;
+        }
+        if ($losses == 0) {
+            $W_per = 100;
+        }
+        $teams[$idx]["W%"] = $W_per;
+    }
+    return $teams;
+}
+
+// Input:  [{ Id: 1, Name: Miami Heat, ... }]
+// Output: [{ Id: 1, Name: Miami Heat, ... , OW_per: 50 }]
+function insert_OW_per($teams)
+{
+    foreach ($teams as $idx => $team) {
+        $opponents = $team["Opponents"];
+        $OW_per = 0;
+        $num_of_opponents = 0;
+        // opponents is an array of ids
+        foreach ($opponents as $opponent) {
+
+            foreach ($teams as $team) {
+
+                if ($team["Id"] != $opponent) {
+                    continue;
+                }
+
+                $OW_per += $team["W%"];
+                $num_of_opponents += 1;
+            }
+        }
+        $OW_per /= $num_of_opponents;
+        $OW_per *= 100;
+        $teams[$idx]["OW%"] = $OW_per;
+    }
+    return $teams;
+}
+
+// Input:  [{ Id: 1, Name: Miami Heat, ... }]
+// Output: [{ Id: 1, Name: Miami Heat, ... , OOW_per: 50 }]
+function insert_OOW_per($teams)
+{
+    foreach ($teams as $idx => $team) {
+        $opponents_OW_per = 0;
+        $num_of_opponents_opponents = 1;
+
+        foreach ($team["Opponents"] as $opponent) { // loop through opponents
+
+            foreach ($teams as $team) { // Find opponent in teams
+
+                if ($team["Id"] != $opponent) {
+                    continue;
+                }
+
+                foreach ($team["Opponents"] as $opponent) { // Loop through Opponents opponents
+
+                    foreach ($teams as $team) { // Find ooponents opponent in teams
+
+                        if ($team["Id"] != $opponent) {
+                            continue;
+                        }
+
+                        $opponents_OW_per += $team["W%"];
+                        $num_of_opponents_opponents += 1;
+                    }
+                }
+            }
+        }
+        $opponents_OW_per /= $num_of_opponents_opponents;
+        $teams[$idx]["OOW%"] = $opponents_OW_per;
+    }
+    return $teams;
+}
+
+function multi_array_min_key_value($elems, $key)
+{
+    $values = multi_array_key_values($elems, $key);
+    $min_value = min($values);
+    return $min_value;
+}
+
+function multi_array_max_key_value($elems, $key)
+{
+    $values = multi_array_key_values($elems, $key);
+    $max_value = max($values);
+    return $max_value;
+}
+
+// Scaled W/L% = [ 0.5 * ( W/L% - MIN( W/L% ) ) ] / { [ MAX(W/L%) - MIN(W/L%) ] } + 0.5
+function scaled_W_per($W_per, $min_W_per, $max_W_per)
+{
+    return (0.5 * ($W_per - $min_W_per)) / ($max_W_per - $min_W_per) + 0.5;
+}
+
+// Input:  [{ Id: 1, Name: Miami Heat, ... }]
+// Output: [{ Id: 1, Name: Miami Heat, ... , Scaled_W_per: 50 }]
+function insert_scaled_W_per($teams)
+{
+    $max_W_per = multi_array_max_key_value($teams, "W%");
+    $min_W_per = multi_array_min_key_value($teams, "W%");
+    foreach ($teams as $idx => $team) {
+        $W_per = $team["W%"];
+        $scaled_W_per = scaled_W_per($W_per, $min_W_per, $max_W_per);
+        $teams[$idx]["Scaled_W%"] = $scaled_W_per;
+    }
+    return $teams;
+}
+
+// SOS = 2/3 * (O-W/L %) + 1/3 * (OO-W/L%)
+function SOS($OW_per, $OOW_per)
+{
+    return 2 / 3 * $OW_per + 1 / 3 * $OOW_per;
+}
+
+function insert_SOS($teams)
+{
+    foreach ($teams as $idx => $team) {
+        $OW_per = $team["OW%"];
+        $OOW_per = $team["OOW%"];
+        $SOS = SOS($OW_per, $OOW_per);
+        $teams[$idx]["SOS"] = $SOS;
+    }
+    return $teams;
+}
+
+function multi_array_key_values($elems, $key)
+{
+    $values = array();
+    foreach ($elems as $elem) {
+        $value = $elem[$key];
+        array_push($values, $value);
+    }
+    return $values;
+}
+
+function scaled_SOS($SOS, $min_SOS, $max_SOS)
+{
+    return (0.5 * ($SOS - $min_SOS)) / (($max_SOS - $min_SOS) + 0.5);
+}
+
+// Scaled SOS = { ( 0.5 ) * [ ( SOS ) - MIN( SOS ) ] } / { [ MAX(SOS) - MIN(SOS) ] } + 0.5
+function insert_scaled_SOS($teams)
+{
+    $min_SOS = multi_array_min_key_value($teams, "SOS");
+    $max_SOS = multi_array_max_key_value($teams, "SOS");
+    foreach ($teams as $idx => $team) {
+        $SOS = $team["SOS"];
+        $scaled_SOS = scaled_SOS($SOS, $min_SOS, $max_SOS);
+        $teams[$idx]["Scaled_SOS"] = $scaled_SOS;
+    }
+    return $teams;
+}
+
+function insert_W_per_power_score($teams)
+{
+    // Points from W/L = W/L Weight x (Scaled W/L %)
+    $W_per_weight = 80;
+    foreach ($teams as $idx => $team) {
+        $scaled_W_per = $team["Scaled_W%"];
+        $W_per_power_score = $W_per_weight * $scaled_W_per;
+        $teams[$idx]["W%_power_score"] = $W_per_power_score;
+    }
+    return $teams;
+}
+// W/L% Weight = 20
+
+// Points from SOS = W/L% Weight x (Scaled SOS %)
+function insert_SOS_power_score($teams)
+{
+    $SOS_weight = 20;
+    foreach ($teams as $idx => $team) {
+        $scaled_SOS = $team["Scaled_SOS"];
+        $SOS_power_score = $SOS_weight * $scaled_SOS;
+        $teams[$idx]["SOS_power_score"] = $SOS_power_score;
+    }
+    return $teams;
+}
+
+function insert_power_score($teams)
+{
+    foreach ($teams as $idx => $team) {
+        $W_per_power_score = $team["W%_power_score"];
+        $SOS_power_score = $team["SOS_power_score"];
+        $power_score = $W_per_power_score + $SOS_power_score;
+        $teams[$idx]["Power_score"] = $power_score;
+    }
+    return $teams;
 }
 
 $games = get_games();
 $teams = array();
 $teams = insert_team_ids($games, $teams);
-$teams = insert_wins_and_losses($games, $teams);
+$teams = insert_W_and_L($games, $teams);
 $teams = insert_opponents($games, $teams);
-$teams = insert_win_loss_per($teams);
-$teams = insert_opponents_win_loss_per($teams);
-$teams = insert_opponents_opponents_win_loss_per($teams);
+$teams = insert_W_per($teams);
+$teams = insert_OW_per($teams);
+$teams = insert_OOW_per($teams);
+$teams = insert_scaled_W_per($teams);
+$teams = insert_SOS($teams);
+$teams = insert_scaled_SOS($teams);
+$teams = insert_W_per_power_score($teams);
+$teams = insert_SOS_power_score($teams);
+$teams = insert_power_score($teams);
+
+// Sort teams by asc order by power score
+array_multisort(array_map(function ($elem) {
+    return $elem["Power_score"];
+}, $teams), SORT_ASC, $teams);
+
+$teams = json_encode($teams);
+$teams = indent_json($teams);
 
 print_r($teams);
 
-?>
+file_put_contents('power_rankings.json', $teams);
