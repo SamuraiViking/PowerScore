@@ -1,6 +1,6 @@
 <?php
 
-require_once 'indent_json.php';
+require_once 'pretty_json.php';
 
 /**
  * This File imports the matches from games.json
@@ -382,7 +382,7 @@ function update_teams($file)
     $teams = insert_power_score($teams);
     $teams = multi_array_sort($teams, "Power_score");
     $teams = json_encode($teams);
-    $teams = indent_json($teams);
+    $teams = pretty_json($teams);
     file_put_contents($file, $teams);
 }
 

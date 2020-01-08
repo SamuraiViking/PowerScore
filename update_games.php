@@ -1,6 +1,6 @@
 <?php
 
-require_once 'indent_json.php'; // has indent_json Fn which takes json input and returns a formatted/indented JSON
+require_once 'pretty_json.php'; // has pretty_json Fn which takes json input and returns a formatted/indented JSON
 include 'keys.php';
 
 function get_most_recent_game_results($input_api_key, $input_secret_key)
@@ -34,7 +34,7 @@ function get_most_recent_game_results($input_api_key, $input_secret_key)
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
     $game_results = trim(curl_exec($ch));
-    $game_results = indent_json($game_results);
+    $game_results = pretty_json($game_results);
 
     file_put_contents('games.json', $game_results);
 }
