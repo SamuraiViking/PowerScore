@@ -188,26 +188,31 @@ function insert_W_per($teams)
     return $teams;
 }
 
+function find_elem($elems, $key, $value)
+{
+    foreach ($elems as $elem) {
+        if ($elem[$key] === $value) {
+            return $elem;
+        }
+    }
+    return false;
+}
+
 // Input:  [{ Id: 1, Name: Miami Heat, ... }]
 // Output: [{ Id: 1, Name: Miami Heat, ... , OW_per: 50 }]
 function insert_OW_per($teams)
 {
     foreach ($teams as $idx => $team) {
-        $opponents = $team["Opponents"];
+        $opponents_ids = $team["Opponents"];
         $OW_per = 0;
         $num_of_opponents = 0;
         // opponents is an array of ids
-        foreach ($opponents as $opponent) {
+        foreach ($opponents_ids as $opponent_id) {
 
-            foreach ($teams as $team) {
+            $opponent = find_elem($teams, "Id", $opponent_id);
+            $OW_per += $opponent["W%"];
+            $num_of_opponents += 1;
 
-                if ($team["Id"] != $opponent) {
-                    continue;
-                }
-
-                $OW_per += $team["W%"];
-                $num_of_opponents += 1;
-            }
         }
         $OW_per /= $num_of_opponents;
         $teams[$idx]["OW%"] = $OW_per;
@@ -222,27 +227,12 @@ function insert_OOW_per($teams)
     foreach ($teams as $idx => $team) {
         $opponents_OW_per = 0;
         $num_of_opponents_opponents = 0;
-
-        foreach ($team["Opponents"] as $opponent) { // loop through opponents
-
-            foreach ($teams as $team) { // Find opponent in teams
-
-                if ($team["Id"] != $opponent) {
-                    continue;
-                }
-
-                foreach ($team["Opponents"] as $opponent) { // Loop through Opponents opponents
-
-                    foreach ($teams as $team) { // Find ooponents opponent in teams
-
-                        if ($team["Id"] != $opponent) {
-                            continue;
-                        }
-
-                        $opponents_OW_per += $team["W%"];
-                        $num_of_opponents_opponents += 1;
-                    }
-                }
+        foreach ($team["Opponents"] as $opponent_id) { // loop through opponents
+            $opponent = find_elem($teams, "Id", $opponent_id);
+            foreach ($opponent["Opponents"] as $opponent_id) {
+                $opponent = find_elem($teams, "Id", $opponent_id);
+                $opponents_OW_per += $opponent["W%"];
+                $num_of_opponents_opponents += 1;
             }
         }
         $opponents_OW_per /= $num_of_opponents_opponents;
