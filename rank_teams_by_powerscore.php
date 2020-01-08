@@ -210,7 +210,6 @@ function insert_OW_per($teams)
             }
         }
         $OW_per /= $num_of_opponents;
-        $OW_per *= 100;
         $teams[$idx]["OW%"] = $OW_per;
     }
     return $teams;
@@ -287,6 +286,7 @@ function insert_scaled_W_per($teams)
 }
 
 // SOS = 2/3 * (O-W/L %) + 1/3 * (OO-W/L%)
+// Input:
 function SOS($OW_per, $OOW_per)
 {
     return 2 / 3 * $OW_per + 1 / 3 * $OOW_per;
