@@ -4,7 +4,7 @@ require_once 'pretty_json.php';
 
 /**
  * This File imports the matches from games.json
- * and then outputs the teams into power_rankings.json
+ * and then outputs the teams into teams.json
  * in order of their power score.
  *
  * The Calculation for the power score of each team can be
