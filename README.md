@@ -1,4 +1,4 @@
-# power_score_ranker
+# PowerScore
 
 ```touch keys.php```
 
