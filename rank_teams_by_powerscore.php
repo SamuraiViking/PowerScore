@@ -222,7 +222,7 @@ function insert_OOW_per($teams)
 {
     foreach ($teams as $idx => $team) {
         $opponents_OW_per = 0;
-        $num_of_opponents_opponents = 1;
+        $num_of_opponents_opponents = 0;
 
         foreach ($team["Opponents"] as $opponent) { // loop through opponents
 
