@@ -2,6 +2,32 @@
 
 include 'keys.php';
 
+function valid_game_results($game_results)
+{
+    if ($game_results == null) {
+        echo "\ngot NULL response from API. Make sure that the URL is correct\n\n";
+        return false;
+    }
+
+    if (property_exists($game_results, "Errors")) {
+        $error_msg = $game_results->Errors[0]->Message;
+        echo "\n$error_msg\n\n";
+        return false;
+    }
+
+    if (!property_exists($game_results, "Games")) {
+        echo "\nExpected game_results to have property \"Games\"\n\n";
+        return false;
+    }
+
+    if (!property_exists($game_results->Games, "Results")) {
+        echo "\nExpected game_results[\"Games\"] to have property \"Results\"\n\n";
+        return false;
+    }
+
+    return true;
+}
+
 function get_most_recent_game_results($input_api_key, $input_secret_key, $input_url)
 {
     $api_key = $input_api_key;
@@ -32,11 +58,16 @@ function get_most_recent_game_results($input_api_key, $input_secret_key, $input_
     curl_setopt($ch, CURLOPT_TIMEOUT, 3);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-    $game_results = trim(curl_exec($ch));
-    $game_results = json_decode($game_results);
-    $game_results = json_encode($game_results, JSON_PRETTY_PRINT);
+    $games = trim(curl_exec($ch));
+    $games_json = json_decode($games);
 
-    file_put_contents('games.json', $game_results);
+    if (!valid_game_results($games_json)) {
+        return;
+    }
+
+    $games = json_encode($games_json, JSON_PRETTY_PRINT);
+
+    file_put_contents('games.json', $games);
 }
 
 get_most_recent_game_results($API_KEY, $SECRET_KEY, $URL);
