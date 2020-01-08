@@ -4,6 +4,7 @@
 
 ```
 // keys.php
+
 <?php
 
 $API_KEY = 'the_api_key';
