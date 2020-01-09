@@ -52,9 +52,6 @@
 
 // Power Score = SOS Power Score + W% Power Score
 
-
-
-
 // Input: None
 // Output: [{ id: 1068426, Name: Miami Heat, ... }, { id: 1068426, Name: Lakers, ... }, ... ]
 function get_games()
@@ -92,6 +89,22 @@ function insert_team_name_and_ids($games, $teams)
             );
 
             array_push($teams, $team);
+        }
+    }
+    return $teams;
+}
+
+function insert_team_age($games, $teams)
+{
+    foreach ($games as $game) {
+
+        $age = $game["Division"]["Name"];
+
+        foreach (["HomeTeam", "AwayTeam"] as $home_away_status) {
+            $team_id = $game[$home_away_status]["TeamId"];
+            // Idx of team in team.json where team["Id"] = $team_id
+            $idx = elem_idx_where_key_value($teams, "Id", $team_id);
+            $teams[$idx]["age"] = $age;
         }
     }
     return $teams;
@@ -162,7 +175,7 @@ function insert_wins_and_losses($games, $teams)
     return $teams;
 }
 
-function find_elem($elems, $key, $value)
+function elem_where_key_value($elems, $key, $value)
 {
     foreach ($elems as $elem) {
         if ($elem[$key] === $value) {
@@ -172,7 +185,7 @@ function find_elem($elems, $key, $value)
     return false;
 }
 
-function find_elem_idx($elems, $key, $value)
+function elem_idx_where_key_value($elems, $key, $value)
 {
     foreach ($elems as $idx => $elem) {
         if ($elem[$key] === $value) {
@@ -196,7 +209,7 @@ function insert_opponents_ids($games, $teams)
         foreach ([$home_team_id, $away_team_id] as $team_id) {
 
             // find idx of elem where elem["Id"] == $team_id in $teams
-            $idx = find_elem_idx($teams, "Id", $team_id);
+            $idx = elem_idx_where_key_value($teams, "Id", $team_id);
 
             if (!key_exists("Opponent_ids", $teams[$idx])) {
                 $teams[$idx]["Opponent_ids"] = array();
@@ -226,7 +239,7 @@ function insert_win_per($teams)
 }
 
 // Input :  [ { ...                   }, { ...                   },  ... ]
-// Output:  [ { ... OW%: 43, OOW%: 50 }, { ... OW%: 30, OOW%: 20 },  ... 
+// Output:  [ { ... OW%: 43, OOW%: 50 }, { ... OW%: 30, OOW%: 20 },  ...
 function insert_opponents_win_per_and_opponents_opponents_win_per($teams)
 {
     foreach ($teams as $idx => $team) {
@@ -239,14 +252,14 @@ function insert_opponents_win_per_and_opponents_opponents_win_per($teams)
         $opponents_ids = $team["Opponent_ids"];
         foreach ($opponents_ids as $opponent_id) {
 
-            $opponent = find_elem($teams, "Id", $opponent_id);
+            $opponent = elem_where_key_value($teams, "Id", $opponent_id);
             $OW_per += $opponent["W%"];
             $num_of_opponents += 1;
 
             $opponents_ids = $opponent["Opponent_ids"];
             foreach ($opponents_ids as $opponent_id) {
 
-                $opponent = find_elem($teams, "Id", $opponent_id);
+                $opponent = elem_where_key_value($teams, "Id", $opponent_id);
                 $OOW_per += $opponent["W%"];
                 $num_of_opponents_opponents += 1;
 
@@ -262,7 +275,7 @@ function insert_opponents_win_per_and_opponents_opponents_win_per($teams)
 
 function scaled_W_per($W_per, $min_W_per, $max_W_per)
 {
-    return (0.5 * ($W_per - $min_W_per)) / ($max_W_per - $min_W_per) + 0.5;
+    return ((0.5 * ($W_per - $min_W_per)) / ($max_W_per - $min_W_per)) + 0.5;
 }
 
 // Input:  [{ ... },
@@ -373,6 +386,7 @@ function update_teams($file)
     $games = get_games();
     $teams = array();
     $teams = insert_team_name_and_ids($games, $teams);
+    $teams = insert_team_age($games, $teams);
     $teams = insert_wins_and_losses($games, $teams);
     $teams = insert_opponents_ids($games, $teams);
     $teams = insert_win_per($teams);
