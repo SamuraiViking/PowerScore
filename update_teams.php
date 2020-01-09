@@ -52,21 +52,23 @@
 
 // Power Score = SOS Power Score + W% Power Score
 
-// Input: None
-// Output: [{ id: 1068426, Name: Miami Heat, ... }, { id: 1068426, Name: Lakers, ... }, ... ]
-function get_games()
+function read_json_file($file)
 {
-    $file_contents_str = file_get_contents("games.json");
-    $file_contents_json = json_decode($file_contents_str, true);
-    $games = $file_contents_json["Games"]["Results"];
-    return $games;
+    $str = file_get_contents($file);
+    $json = json_decode($str, true);
+
+    if (is_null($json)) {
+        return array();
+    }
+
+    return $json;
 }
 
 // Input:  []
 // Output: [{ id: 1068426, Name: Miami Heat, ... }, { id: 1068426, Name: Lakers, ... } ... ]
-function insert_team_name_and_ids($games, $teams)
+function update_team_ids($games, $teams)
 {
-    $discovered_teams = array();
+    // $discovered_teams = array();
     foreach ($games as $game) {
 
         foreach (["HomeTeam", "AwayTeam"] as $home_away_status) {
@@ -75,18 +77,34 @@ function insert_team_name_and_ids($games, $teams)
             $team_id = $team["TeamId"];
             $team_name = $team["Name"];
 
-            if (in_array($team_id, $discovered_teams)) {
+            // If a team is already in teams
+            // team won't be pushed into teams
+            if (filter_by_value($teams, "Id", $team_id)) {
                 continue;
             }
 
-            array_push($discovered_teams, $team_id);
-
-            $team = array(
-                'Id' => $team_id,
-                'Name' => $team_name,
-            );
+            $team = array('Id' => $team_id);
 
             array_push($teams, $team);
+        }
+    }
+    return $teams;
+}
+
+function update_team_key($games, $teams, $key)
+{
+    foreach ($games as $game) {
+
+        foreach (["HomeTeam", "AwayTeam"] as $home_away_status) {
+
+            $team = $game[$home_away_status];
+            $team_id = $team["TeamId"];
+            $team_name = $team["Name"];
+
+            // idx of elem in teams where elem["Id"] = $team_id
+            $idx = elem_idx_where_key_value($teams, "Id", $team_id);
+
+            $teams[$idx][$key] = $team[$key];
         }
     }
     return $teams;
@@ -273,9 +291,10 @@ function insert_opponents_win_per_and_opponents_opponents_win_per($teams)
 
 function filter_by_value($array, $index, $value)
 {
-    if (!is_array($array)) {return;}
-    if (!count($array) > 0) {return;}
+    if (!is_array($array)) {return false;}
+    if (!count($array) > 0) {return false;}
 
+    $newarray = array();
     foreach (array_keys($array) as $key) {
         $temp[$key] = $array[$key][$index];
 
@@ -397,25 +416,49 @@ function multi_array_sort($teams, $key)
     return $teams;
 }
 
-function update_teams($file)
+function update_teams($teams_file, $prev_games_file, $games_file)
 {
-    $games = get_games();
+    $games = read_json_file($games_file);
+    $games = $games["Games"]["Results"];
+    $prev_games = read_json_file($prev_games_file);
+
+    if ($prev_games) {
+        $games = array_merge($prev_games, $games);
+    }
+
     $teams = array();
-    $teams = insert_team_name_and_ids($games, $teams);
+    $teams = update_team_ids($games, $teams);
+    echo "IDs Updated\n";
+    $teams = update_team_key($games, $teams, "Name");
+    echo "Names Updated\n";
     $teams = insert_team_age($games, $teams);
+    echo "Ages Updated\n";
     $teams = insert_wins_and_losses($games, $teams);
-    $teams = insert_opponents_ids($games, $teams);
+    echo "Wins and Losses Updated\n";
     $teams = insert_win_per($teams);
+    echo "W% Updated\n";
+    $teams = insert_opponents_ids($games, $teams);
+    echo "Opponent Ids Updated\n";
     $teams = insert_opponents_win_per_and_opponents_opponents_win_per($teams);
+    echo "OW and OOW Ids Updated\n";
     $teams = insert_scaled_win_per($teams);
+    echo "Scaled W% Updated\n";
     $teams = insert_strength_of_schedule($teams);
+    echo "SOS Updated\n";
     $teams = insert_scaled_strength_of_schedule($teams);
+    echo "Scaled SOS Updated\n";
     $teams = insert_win_per_power_score($teams);
+    echo "W% Power Score Updated\n";
     $teams = insert_strength_of_schedule_power_score($teams);
+    echo "SOS Power Score Updated\n";
     $teams = insert_power_score($teams);
-    $teams = multi_array_sort($teams, "Power_score");
+    echo "Power Score Updated\n";
+    // $teams = multi_array_sort($teams, "Power_score");
     $teams = json_encode($teams, JSON_PRETTY_PRINT);
-    file_put_contents($file, $teams);
+    $games = json_encode($games, JSON_PRETTY_PRINT);
+    echo "Converted to Json\n";
+    file_put_contents($teams_file, $teams);
+    file_put_contents($prev_games_file, $games);
 }
 
-update_teams("teams.json");
+update_teams("teams.json", "prev_games.json", "games.json");
