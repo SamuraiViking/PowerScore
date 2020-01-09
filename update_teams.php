@@ -52,6 +52,9 @@
 
 // Power Score = SOS Power Score + W% Power Score
 
+
+
+
 // Input: None
 // Output: [{ id: 1068426, Name: Miami Heat, ... }, { id: 1068426, Name: Lakers, ... }, ... ]
 function get_games()
@@ -299,7 +302,7 @@ function insert_strength_of_schedule($teams)
 
 function scaled_strength_of_schedule($SOS, $min_SOS, $max_SOS)
 {
-    return (0.5 * ($SOS - $min_SOS)) / (($max_SOS - $min_SOS) + 0.5);
+    return (0.5 * ($SOS - $min_SOS)) / ($max_SOS - $min_SOS) + 0.5;
 }
 
 // Input:  [{ ...                   }, { ...                   }, ... ]
