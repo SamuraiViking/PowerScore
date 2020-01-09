@@ -66,22 +66,20 @@ function get_games()
 // Output: [{ id: 1068426, Name: Miami Heat, ... }, { id: 1068426, Name: Lakers, ... } ... ]
 function insert_team_name_and_ids($games, $teams)
 {
-    $inserted_ids = array();
+    $discovered_teams = array();
     foreach ($games as $game) {
 
-        $home_team = $game["HomeTeam"];
-        $away_team = $game["AwayTeam"];
+        foreach (["HomeTeam", "AwayTeam"] as $home_away_status) {
 
-        foreach ([$home_team, $away_team] as $team) {
-
+            $team = $game[$home_away_status];
             $team_id = $team["TeamId"];
             $team_name = $team["Name"];
 
-            if (in_array($team_id, $inserted_ids)) {
+            if (in_array($team_id, $discovered_teams)) {
                 continue;
             }
 
-            array_push($inserted_ids, $team_id);
+            array_push($discovered_teams, $team_id);
 
             $team = array(
                 'Id' => $team_id,
@@ -273,6 +271,22 @@ function insert_opponents_win_per_and_opponents_opponents_win_per($teams)
     return $teams;
 }
 
+function filter_by_value($array, $index, $value)
+{
+    if (!is_array($array)) {return;}
+    if (!count($array) > 0) {return;}
+
+    foreach (array_keys($array) as $key) {
+        $temp[$key] = $array[$key][$index];
+
+        if ($temp[$key] == $value) {
+            $newarray[$key] = $array[$key];
+        }
+    }
+
+    return $newarray;
+}
+
 function scaled_W_per($W_per, $min_W_per, $max_W_per)
 {
     return ((0.5 * ($W_per - $min_W_per)) / ($max_W_per - $min_W_per)) + 0.5;
@@ -285,10 +299,11 @@ function scaled_W_per($W_per, $min_W_per, $max_W_per)
 //          { ... Scaled_W_per: 80 }, ... ]
 function insert_scaled_win_per($teams)
 {
-    $min_W_per = min(array_column($teams, "W%"));
-    $max_W_per = max(array_column($teams, "W%"));
     foreach ($teams as $idx => $team) {
-
+        $age = $team["age"];
+        $teams_same_age = filter_by_value($teams, "age", $age);
+        $min_W_per = min(array_column($teams_same_age, "W%"));
+        $max_W_per = max(array_column($teams_same_age, "W%"));
         $W_per = $team["W%"];
         $scaled_W_per = scaled_W_per($W_per, $min_W_per, $max_W_per);
         $teams[$idx]["Scaled_W%"] = $scaled_W_per;
@@ -322,11 +337,12 @@ function scaled_strength_of_schedule($SOS, $min_SOS, $max_SOS)
 // Output: [{ ... scaled_SOS: 0.435 }, { ... scaled_SOS: 0.817 }, ... ]
 function insert_scaled_strength_of_schedule($teams)
 {
-    $min_SOS = min(array_column($teams, "SOS"));
-    $max_SOS = max(array_column($teams, "SOS"));
     foreach ($teams as $idx => $team) {
-
         $SOS = $team["SOS"];
+        $age = $team["age"];
+        $teams_same_age = filter_by_value($teams, "age", $age);
+        $min_SOS = min(array_column($teams_same_age, "SOS"));
+        $max_SOS = max(array_column($teams_same_age, "SOS"));
         $scaled_SOS = scaled_strength_of_schedule($SOS, $min_SOS, $max_SOS);
         $teams[$idx]["Scaled_SOS"] = $scaled_SOS;
     }
